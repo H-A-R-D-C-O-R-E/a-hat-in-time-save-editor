@@ -1,4 +1,4 @@
-import { decode, encode } from '../src/hat.js';
+import { decode, encode } from './hat.js';
 import { CATEGORIES } from './registry.js';
 import { characterOf, characterBlocker, setCharacter, characterSetting, CHARACTER_ROW } from './character.js';
 
