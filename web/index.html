@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Hat in Time — Save Editor</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">◆</span>
+    <span class="brand-text">
+      <strong>A Hat in Time</strong>
+      <span>save editor</span>
+    </span>
+  </div>
+
+  <div class="filebar">
+    <span class="file-name" id="file-name">no file loaded</span>
+    <span class="file-meta" id="file-meta"></span>
+  </div>
+
+  <div class="character" id="character" hidden>
+    <span class="character-label">Play as</span>
+    <div class="segmented" role="group" aria-label="Character">
+      <button type="button" class="seg" data-character="hat" aria-pressed="false">Hat Kid</button>
+      <button type="button" class="seg" data-character="bow" aria-pressed="false">Bow Kid</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="btn-open" class="btn" type="button">Open .hat…</button>
+    <button id="btn-revert" class="btn" type="button" disabled>Revert</button>
+    <button id="btn-save" class="btn btn-primary" type="button" disabled>Download .hat</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Categories">
+    <ul id="nav"></ul>
+  </nav>
+
+  <main class="main">
+
+    <section id="empty" class="empty">
+      <div class="drop" id="drop">
+        <p class="drop-title">Drop a <code>.hat</code> save here</p>
+        <p class="drop-sub">or <button id="btn-open-2" class="link" type="button">choose a file</button></p>
+        <p class="drop-hint">Nothing is uploaded — everything runs in your browser.</p>
+      </div>
+    </section>
+
+    <section id="editor" class="editor" hidden>
+      <div class="toolbar">
+        <div class="toolbar-row">
+          <h1 id="cat-title"></h1>
+          <div class="tally" id="tally"></div>
+        </div>
+        <div class="toolbar-row">
+          <input type="search" id="search" class="search" placeholder="Filter…" autocomplete="off" spellcheck="false">
+          <div class="chips" id="chips" role="group" aria-label="Filter"></div>
+          <div class="bulk">
+            <button class="btn btn-ghost" type="button" data-bulk="true">Select all</button>
+            <button class="btn btn-ghost" type="button" data-bulk="false">Select none</button>
+          </div>
+        </div>
+        <p class="blurb" id="blurb"></p>
+        <p class="banner" id="banner" hidden></p>
+      </div>
+
+      <div id="list" class="list"></div>
+
+      <details class="notes" id="notes">
+        <summary>What this writes to the file</summary>
+        <div id="notes-body"></div>
+      </details>
+    </section>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </main>
+</div>
+
+<input type="file" id="file-input" accept=".hat" hidden>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

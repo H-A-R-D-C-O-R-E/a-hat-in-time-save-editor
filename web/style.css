@@ -1,0 +1,380 @@
+:root {
+  --bg: #12141a;
+  --panel: #1a1d25;
+  --panel-2: #21252f;
+  --line: #2c3140;
+  --text: #e9ecf3;
+  --muted: #98a0b3;
+  --accent: #ffd24a;
+  --accent-ink: #1a1503;
+  --teal: #5ec8d8;
+  --danger: #ff7b72;
+  --ok: #7ee0a3;
+  --radius: 10px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+/* The hidden attribute has to beat the layout rules further down: `.empty` and
+   `.editor` both set their own `display`, which would otherwise leave the drop
+   zone on screen (and an empty editor under it) long after a file was loaded. */
+[hidden] { display: none !important; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font: inherit; color: inherit; }
+
+/* ---------------------------------------------------------------- topbar ---- */
+
+.topbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 18px;
+  background: linear-gradient(180deg, #1d2029, #171a21);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark {
+  display: grid; place-items: center;
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 15px;
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-text strong { font-size: 14px; letter-spacing: .2px; }
+.brand-text span { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .09em; }
+
+.filebar { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
+.file-name {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.file-meta { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+
+.actions { display: flex; gap: 8px; }
+
+/* the Hat Kid / Bow Kid switch — a single global setting, so it sits with the
+   file rather than in the sidebar of item lists */
+.character { display: flex; align-items: center; gap: 9px; }
+.character-label {
+  font-size: 11.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  white-space: nowrap;
+}
+.segmented {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel);
+}
+.seg {
+  padding: 4px 11px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  transition: background .12s, color .12s;
+}
+.seg:hover:not(:disabled):not(.is-active) { background: var(--panel-2); color: var(--text); }
+.seg.is-active { background: var(--accent); color: var(--accent-ink); font-weight: 650; }
+.seg:disabled { opacity: .4; cursor: not-allowed; }
+
+.btn {
+  padding: 7px 13px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-2);
+  cursor: pointer;
+  font-size: 13.5px;
+  transition: background .12s, border-color .12s, opacity .12s;
+}
+.btn:hover:not(:disabled) { background: #2a2f3c; border-color: #3b4252; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 650; }
+.btn-primary:hover:not(:disabled) { background: #ffdd70; border-color: #ffdd70; }
+.btn-ghost { background: transparent; }
+.link {
+  background: none; border: 0; padding: 0;
+  color: var(--teal); cursor: pointer; text-decoration: underline;
+}
+
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- layout ---- */
+
+.layout { flex: 1; display: flex; min-height: 0; }
+
+.sidebar {
+  flex: none;
+  width: 210px;
+  padding: 16px 12px;
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  overflow: auto;
+}
+.sidebar ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+
+.nav-item {
+  width: 100%;
+  text-align: left;
+  padding: 8px 11px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+}
+.nav-item:hover:not(:disabled) { background: var(--panel-2); color: var(--text); }
+.nav-item.is-active {
+  background: rgba(255, 210, 74, .12);
+  border-color: rgba(255, 210, 74, .35);
+  color: var(--accent);
+  font-weight: 600;
+}
+.nav-item:disabled { opacity: .45; cursor: not-allowed; }
+
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
+
+/* ----------------------------------------------------------------- empty ---- */
+
+.empty { flex: 1; display: grid; place-items: center; padding: 32px; }
+
+.drop {
+  width: min(560px, 100%);
+  padding: 52px 32px;
+  text-align: center;
+  border: 2px dashed var(--line);
+  border-radius: 16px;
+  background: var(--panel);
+  transition: border-color .15s, background .15s;
+}
+.drop.is-hot { border-color: var(--accent); background: rgba(255, 210, 74, .07); }
+
+/* Once a file is loaded the drop zone is gone, so the hint of where a new save
+   would land moves onto the editor itself. */
+body.is-dragging .editor:not([hidden]) {
+  outline: 2px dashed var(--accent);
+  outline-offset: -8px;
+  background: rgba(255, 210, 74, .04);
+}
+.drop-title { margin: 0 0 6px; font-size: 19px; font-weight: 600; }
+.drop-title code { font-family: var(--mono); color: var(--accent); }
+.drop-sub { margin: 0 0 22px; color: var(--muted); }
+.drop-hint { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+/* --------------------------------------------------------------- editor ----- */
+
+.editor { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+.toolbar {
+  flex: none;
+  padding: 16px 22px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+.toolbar-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.toolbar-row + .toolbar-row { margin-top: 12px; }
+
+.toolbar h1 { margin: 0; font-size: 18px; font-weight: 650; }
+.tally {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  background: rgba(255, 210, 74, .1);
+  border: 1px solid rgba(255, 210, 74, .25);
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.search {
+  flex: 1 1 220px;
+  min-width: 180px;
+  padding: 7px 11px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 14px;
+}
+.search::placeholder { color: var(--muted); }
+
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.chip:hover { color: var(--text); border-color: #3b4252; }
+.chip.is-on { background: var(--teal); border-color: var(--teal); color: #08262c; font-weight: 600; }
+
+.bulk { display: flex; gap: 6px; margin-left: auto; }
+.bulk .btn { font-size: 12.5px; padding: 5px 10px; }
+
+.blurb { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+.blurb:empty { display: none; }
+
+.banner {
+  margin: 10px 0 0;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  border-radius: 7px;
+  background: rgba(255, 179, 92, .1);
+  border: 1px solid rgba(255, 179, 92, .35);
+  color: var(--text);
+}
+.banner:empty, .banner[hidden] { display: none; }
+
+/* ------------------------------------------------------------------ list ---- */
+
+.list { flex: 1; overflow: auto; padding: 8px 22px 24px; }
+
+.group { margin-top: 18px; }
+.group-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  background: #161922;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.group-title { font-size: 12.5px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); }
+.group-count { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+
+.group-list { list-style: none; margin: 0; padding: 0; }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+.row:hover { background: var(--panel-2); }
+
+.row.is-disabled { opacity: .55; }
+.row.is-disabled .row-label { cursor: not-allowed; }
+.row.is-disabled:hover { background: none; }
+
+.row-label { flex: 1; display: flex; align-items: center; gap: 11px; min-width: 0; cursor: pointer; }
+.row-label--plain { cursor: default; }
+
+.row input[type="checkbox"] {
+  flex: none;
+  width: 16px; height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.row-name {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* rows with more than one field per item (death wish stamps) */
+.row-fields { display: flex; align-items: center; gap: 10px; flex: none; }
+.row-field { display: inline-flex; align-items: center; gap: 3px; cursor: pointer; }
+.row-field-key { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.row.is-disabled .row-field { cursor: not-allowed; }
+
+/* a count, beside the box that says you have the item at all (Backpack) */
+.row-field input[type="number"] {
+  width: 7ch;
+  padding: 3px 5px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: text;
+}
+.row-field input[type="number"]:focus { outline: none; border-color: var(--accent); }
+.row.is-disabled .row-field input[type="number"] { color: var(--muted); cursor: not-allowed; }
+
+.row-tags { display: flex; gap: 6px; flex: none; }
+.tag {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.tag-absent { border-color: rgba(255, 123, 114, .45); color: var(--danger); }
+.tag-mod { border-color: rgba(94, 200, 216, .45); color: var(--teal); }
+
+.no-match { padding: 40px 0; text-align: center; color: var(--muted); }
+
+/* ----------------------------------------------------------------- notes ---- */
+
+.notes {
+  flex: none;
+  padding: 0 22px 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.notes summary { cursor: pointer; color: var(--teal); padding-top: 4px; }
+.notes p { margin: 8px 0 0; line-height: 1.6; }
+
+/* ---------------------------------------------------------------- status ---- */
+
+.status {
+  flex: none;
+  min-height: 0;
+  margin: 0;
+  padding: 0 22px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.status:not(:empty) { padding: 9px 22px; border-top: 1px solid var(--line); background: var(--panel); }
+.status-error { color: var(--danger); }
+
+/* -------------------------------------------------------------- responsive -- */
+
+@media (max-width: 760px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; border-right: 0; border-bottom: 1px solid var(--line); padding: 10px; }
+  .sidebar ul { flex-direction: row; flex-wrap: wrap; }
+  .nav-item { width: auto; }
+  .filebar { display: none; }
+  .character-label { display: none; }
+  .bulk { margin-left: 0; }
+}
