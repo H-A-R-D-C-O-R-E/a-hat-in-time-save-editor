@@ -13,7 +13,6 @@ import { backpackList } from './backpack-list.js';
 export default backpackList({
   id: 'weapons',
   title: 'Weapons',
-  blurb: 'The weapons you have unlocked.',
   list: 'weapons',
   groupLabel: 'weapons',
   notes: [

@@ -94,8 +94,8 @@ export const LISTS = {
       "Hat_Collectible_VaultCode_Green": "hatintimegamecontent.Hat_Collectible_VaultCode_Green",
       "Hat_Collectible_VaultCode_Yellow": "hatintimegamecontent.Hat_Collectible_VaultCode_Yellow",
       "Hat_Collectible_VaultCode_Yellow_Moving": "hatintimegamecontent.Hat_Collectible_VaultCode_Yellow_Moving",
-      "Tag_Collectible_Soul": "vanessacursemod.Tag_Collectible_Soul",
-      "Tag_Collectible_VanessaCrown": "vanessacursemod.Tag_Collectible_VanessaCrown"
+      "Tag_Collectible_Soul": "hatintimegamecontent.Tag_Collectible_Soul",
+      "Tag_Collectible_VanessaCrown": "hatintimegamecontent.Tag_Collectible_VanessaCrown"
     }
   },
   "dyes": {
@@ -202,13 +202,13 @@ export const LISTS = {
       "Hat_Collectible_Skin_Wahoo": "hatintimegamecontent.Hat_Collectible_Skin_Wahoo",
       "Hat_Collectible_Skin_Wireframe": "hatintimegamecontent.Hat_Collectible_Skin_Wireframe",
       "Hat_Collectible_Skin_WitchDress": "hatintimegamecontent.Hat_Collectible_Skin_WitchDress",
-      "Tag_Collectible_Skin_BlueBomber": "vanessacursemod.Tag_Collectible_Skin_BlueBomber",
-      "Tag_Collectible_Skin_BodyMaterial_Film": "vanessacursemod.Tag_Collectible_Skin_BodyMaterial_Film",
-      "Tag_Collectible_Skin_BodyMaterial_GoldenCrown": "vanessacursemod.Tag_Collectible_Skin_BodyMaterial_GoldenCrown",
-      "Tag_Collectible_Skin_Pastel": "vanessacursemod.Tag_Collectible_Skin_Pastel",
-      "Tag_Collectible_Skin_Punk": "vanessacursemod.Tag_Collectible_Skin_Punk",
-      "Tag_Collectible_Skin_Roll": "vanessacursemod.Tag_Collectible_Skin_Roll",
-      "Tag_Collectible_Skin_Violet": "vanessacursemod.Tag_Collectible_Skin_Violet"
+      "Tag_Collectible_Skin_BlueBomber": "hatintimegamecontent.Tag_Collectible_Skin_BlueBomber",
+      "Tag_Collectible_Skin_BodyMaterial_Film": "hatintimegamecontent.Tag_Collectible_Skin_BodyMaterial_Film",
+      "Tag_Collectible_Skin_BodyMaterial_GoldenCrown": "hatintimegamecontent.Tag_Collectible_Skin_BodyMaterial_GoldenCrown",
+      "Tag_Collectible_Skin_Pastel": "hatintimegamecontent.Tag_Collectible_Skin_Pastel",
+      "Tag_Collectible_Skin_Punk": "hatintimegamecontent.Tag_Collectible_Skin_Punk",
+      "Tag_Collectible_Skin_Roll": "hatintimegamecontent.Tag_Collectible_Skin_Roll",
+      "Tag_Collectible_Skin_Violet": "hatintimegamecontent.Tag_Collectible_Skin_Violet"
     }
   },
   "filters": {
@@ -274,7 +274,7 @@ export const LISTS = {
       "Hat_Collectible_Remix_Subcon_Village": "hatintimegamecontent.Hat_Collectible_Remix_Subcon_Village",
       "Hat_Collectible_Remix_Trainwreck_MoonJazz": "hatintimegamecontent.Hat_Collectible_Remix_Trainwreck_MoonJazz",
       "Hat_Collectible_Remix_Trainwreck_TrainRushElectroSwing": "hatintimegamecontent.Hat_Collectible_Remix_Trainwreck_TrainRushElectroSwing",
-      "Tag_Collectible_Remix_DeadlyTag_remix": "vanessacursemod.Tag_Collectible_Remix_DeadlyTag_remix"
+      "Tag_Collectible_Remix_DeadlyTag_remix": "hatintimegamecontent.Tag_Collectible_Remix_DeadlyTag_remix"
     }
   },
   "stickers": {
@@ -434,8 +434,8 @@ export const LISTS = {
       "Hat_Collectible_Sticker_Saane_ThankYou": "hatintimegamecontent.Hat_Collectible_Sticker_Saane_ThankYou",
       "Hat_Collectible_Sticker_Star": "hatintimegamecontent.Hat_Collectible_Sticker_Star",
       "Hat_Collectible_Sticker_TimePiece": "hatintimegamecontent.Hat_Collectible_Sticker_TimePiece",
-      "Tag_Collectible_Sticker_GotYou": "vanessacursemod.Tag_Collectible_Sticker_GotYou",
-      "Tag_Collectible_Sticker_WhoDares": "vanessacursemod.Tag_Collectible_Sticker_WhoDares",
+      "Tag_Collectible_Sticker_GotYou": "hatintimegamecontent.Tag_Collectible_Sticker_GotYou",
+      "Tag_Collectible_Sticker_WhoDares": "hatintimegamecontent.Tag_Collectible_Sticker_WhoDares",
       "Werti_Collectible_Sticker_GO": "hatintimegamecontent.Werti_Collectible_Sticker_GO",
       "Werti_Collectible_Sticker_Ready": "hatintimegamecontent.Werti_Collectible_Sticker_Ready"
     }
@@ -466,7 +466,7 @@ export const LISTS = {
       "Hat_Weapon_Umbrella": "hatintimegamecontent.Hat_Weapon_Umbrella",
       "Hat_Weapon_Umbrella_Debug": "hatintimegamecontent.Hat_Weapon_Umbrella_Debug",
       "Hat_Weapon_Unarmed": "hatintimegamecontent.Hat_Weapon_Unarmed",
-      "Tag_Weapon_GothicUmbrella": "vanessacursemod.Tag_Weapon_GothicUmbrella"
+      "Tag_Weapon_GothicUmbrella": "hatintimegamecontent.Tag_Weapon_GothicUmbrella"
     }
   }
 };

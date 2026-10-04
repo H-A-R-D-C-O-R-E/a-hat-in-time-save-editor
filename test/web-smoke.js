@@ -824,8 +824,8 @@ await check('More lists the fields nothing else covers, in order', () => {
   assert.equal($('banner').hidden, true, 'nothing here is ever refused as a whole');
   assert.equal(document.querySelectorAll('#list .tag-absent').length, 10,
     'the fields and flags this save has no record of');
-  assert.equal(document.querySelectorAll('#list .row input').length, 151,
-    '12 counts and one box, 10 levels, 79 roads, three boxes per contract, 7 flag counts');
+  assert.equal(document.querySelectorAll('#list .row input').length, 154,
+    '11 counts plus TotalPlayTime h/m/s/cs and one box, 10 levels, 79 roads, three boxes per contract, 7 flag counts');
   assert.equal(document.querySelectorAll('#list .tag-mod').length, 0,
     'an unmodded save must not be shown a rift it cannot reach');
   assert.ok([...document.querySelectorAll('#list .row-name')]
@@ -966,7 +966,7 @@ await check('Select all ticks boxes but never rewrites a number', () => {
   const numbers = () => [...document.querySelectorAll('#list input[type="number"]')]
     .map((i) => i.value);
   const before = numbers();
-  assert.equal(before.length, 19, '12 scalar counts and 7 flag counts');
+  assert.equal(before.length, 22, '11 scalar counts plus TotalPlayTime h/m/s/cs and 7 flag counts');
 
   fire(document.querySelector('[data-bulk="true"]'), 'click');
 

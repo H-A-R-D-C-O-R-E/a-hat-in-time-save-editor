@@ -38,7 +38,6 @@ function editable(doc) {
 export default {
   id: 'hats',
   title: 'Hats',
-  blurb: 'The ability hats. Ticking one adds it to this save’s backpack if it isn’t there already.',
   // "Not in this save" would mean exactly the same as "Not collected" here.
   filters: ['all', 'collected', 'uncollected'],
 

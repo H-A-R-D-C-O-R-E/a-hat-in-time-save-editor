@@ -104,19 +104,19 @@ export const FLAIR_OBJECTS = {
   },
   "Tag_CosmeticItemQualityInfo_SprintHat_Bunny": {
     "hat": "Hat_Ability_Sprint",
-    "object": "vanessacursemod.Tag_CosmeticItemQualityInfo_SprintHat_Bunny"
+    "object": "hatintimegamecontent.Tag_CosmeticItemQualityInfo_SprintHat_Bunny"
   },
   "Tag_CosmeticItemQualityInfo_SprintHat_Crown": {
     "hat": "Hat_Ability_Sprint",
-    "object": "vanessacursemod.Tag_CosmeticItemQualityInfo_SprintHat_Crown"
+    "object": "hatintimegamecontent.Tag_CosmeticItemQualityInfo_SprintHat_Crown"
   },
   "Tag_CosmeticItemQualityInfo_SprintHat_FeatherMask": {
     "hat": "Hat_Ability_Sprint",
-    "object": "vanessacursemod.Tag_CosmeticItemQualityInfo_SprintHat_FeatherMask"
+    "object": "hatintimegamecontent.Tag_CosmeticItemQualityInfo_SprintHat_FeatherMask"
   },
   "Tag_CosmeticItemQualityInfo_SprintHat_PunkCap": {
     "hat": "Hat_Ability_Sprint",
-    "object": "vanessacursemod.Tag_CosmeticItemQualityInfo_SprintHat_PunkCap"
+    "object": "hatintimegamecontent.Tag_CosmeticItemQualityInfo_SprintHat_PunkCap"
   },
   "Hat_CosmeticItemQualityInfo_Chemical_BurgerCap": {
     "hat": "Hat_Ability_Chemical",
@@ -128,11 +128,11 @@ export const FLAIR_OBJECTS = {
   },
   "Hat_CosmeticItemQualityInfo_Chemical_Donut": {
     "hat": "Hat_Ability_Chemical",
-    "object": "vanessacursemod.Hat_CosmeticItemQualityInfo_Chemical_Donut"
+    "object": "hatintimegamecontent.Hat_CosmeticItemQualityInfo_Chemical_Donut"
   },
   "Hat_CosmeticItemQualityInfo_Chemical_Lamp": {
     "hat": "Hat_Ability_Chemical",
-    "object": "vanessacursemod.Hat_CosmeticItemQualityInfo_Chemical_Lamp"
+    "object": "hatintimegamecontent.Hat_CosmeticItemQualityInfo_Chemical_Lamp"
   },
   "Hat_CosmeticItemQualityInfo_Chemical_NyakuzaCatEars": {
     "hat": "Hat_Ability_Chemical",
@@ -164,11 +164,11 @@ export const FLAIR_OBJECTS = {
   },
   "Tag_CosmeticItemQualityInfo_IceHat_Cube": {
     "hat": "Hat_Ability_StatueFall",
-    "object": "vanessacursemod.Tag_CosmeticItemQualityInfo_IceHat_Cube"
+    "object": "hatintimegamecontent.Tag_CosmeticItemQualityInfo_IceHat_Cube"
   },
   "Tag_CosmeticItemQualityInfo_IceFox": {
     "hat": "Hat_Ability_StatueFall",
-    "object": "vanessacursemod.Tag_CosmeticItemQualityInfo_IceFox"
+    "object": "hatintimegamecontent.Tag_CosmeticItemQualityInfo_IceFox"
   },
   "Hat_CosmeticItemQualityInfo_FoxMask_Beret": {
     "hat": "Hat_Ability_FoxMask",
@@ -188,7 +188,7 @@ export const FLAIR_OBJECTS = {
   },
   "Hat_CosmeticItemQualityInfo_FoxMask_Visualizer": {
     "hat": "Hat_Ability_FoxMask",
-    "object": "vanessacursemod.Hat_CosmeticItemQualityInfo_FoxMask_Visualizer"
+    "object": "hatintimegamecontent.Hat_CosmeticItemQualityInfo_FoxMask_Visualizer"
   },
   "Hat_CosmeticItemQualityInfo_TimeStop_Headphones": {
     "hat": "Hat_Ability_TimeStop",

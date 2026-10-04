@@ -4,8 +4,8 @@
 export const SECRET_LEVELS = [
   "Cruise_CaveRift_Aquarium",
   "Metro_CaveRift_RumbiFactory",
-  "SandsSkiesPurple",
   "Sands_PurpleRiftSandSails",
+  "SandsSkiesPurple",
   "TimeRift_Cave_Alps",
   "TimeRift_Cave_BirdBasement",
   "TimeRift_Cave_CampPurpleRift",
@@ -125,8 +125,17 @@ export const CHALLENGE_ROADS = [
 
 export const CONTRACT_OBJECTS = {
   "Hat_SnatcherContract_Act": "hatintimegamecontent.Hat_SnatcherContract_Act",
+  "Hat_SnatcherContract_FeedSpider": "hatintimegamecontent.Hat_SnatcherContract_FeedSpider",
+  "Hat_SnatcherContract_FireSpirits": "hatintimegamecontent.Hat_SnatcherContract_FireSpirits",
   "Hat_SnatcherContract_IceWall": "hatintimegamecontent.Hat_SnatcherContract_IceWall",
   "Hat_SnatcherContract_MailDelivery": "hatintimegamecontent.Hat_SnatcherContract_MailDelivery",
+  "Hat_SnatcherContract_MailDeliveryW": "hatintimegamecontent.Hat_SnatcherContract_MailDeliveryW",
+  "Hat_SnatcherContract_Murder": "hatintimegamecontent.Hat_SnatcherContract_Murder",
   "Hat_SnatcherContract_Toilet": "hatintimegamecontent.Hat_SnatcherContract_Toilet",
-  "Hat_SnatcherContract_Vanessa": "hatintimegamecontent.Hat_SnatcherContract_Vanessa"
+  "Hat_SnatcherContract_Vanessa": "hatintimegamecontent.Hat_SnatcherContract_Vanessa",
+  "Hat_SnatcherContract_Winter_OnlineParty_Boop_2022": "hatintimegamecontent.Hat_SnatcherContract_Winter_OnlineParty_Boop_2022",
+  "Hat_SnatcherContract_Winter_OnlineParty_Friends_2022": "hatintimegamecontent.Hat_SnatcherContract_Winter_OnlineParty_Friends_2022",
+  "Hat_SnatcherContract_Winter_OnlineParty_ModTimePiece_2022": "hatintimegamecontent.Hat_SnatcherContract_Winter_OnlineParty_ModTimePiece_2022",
+  "Hat_SnatcherContract_Winter_OnlineParty_Sticker_2022": "hatintimegamecontent.Hat_SnatcherContract_Winter_OnlineParty_Sticker_2022",
+  "Hat_SnatcherContract_Winter_OnlineParty_VanessasCurse_2022": "hatintimegamecontent.Hat_SnatcherContract_Winter_OnlineParty_VanessasCurse_2022"
 };

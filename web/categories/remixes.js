@@ -16,7 +16,6 @@ import { backpackList } from './backpack-list.js';
 export default backpackList({
   id: 'remixes',
   title: 'Remixes',
-  blurb: 'The alternate level music you have unlocked.',
   list: 'remixes',
   groupLabel: 'remixes',
   notes: [

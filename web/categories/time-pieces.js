@@ -186,7 +186,6 @@ function adaptElement(element, schema, id) {
 export default {
   id: 'time-pieces',
   title: 'Time Pieces',
-  blurb: 'The pieces you have collected. Ticking one marks it collected in this save.',
 
   rows(doc) {
     // Read only. Creating the list here would mean that merely *looking* at a

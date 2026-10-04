@@ -21,7 +21,6 @@ import { backpackList } from './backpack-list.js';
 export default backpackList({
   id: 'badges',
   title: 'Badges',
-  blurb: 'The perks you can pin on. Ticking one adds it to this save’s backpack.',
   list: 'badges',
   groupLabel: 'badges',
   notes: [

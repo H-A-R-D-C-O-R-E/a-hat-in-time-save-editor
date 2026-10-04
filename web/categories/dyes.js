@@ -16,7 +16,6 @@ import { backpackList } from './backpack-list.js';
 export default backpackList({
   id: 'dyes',
   title: 'Dyes',
-  blurb: 'The colours you have unlocked for hats and outfits.',
   list: 'dyes',
   groupLabel: 'dyes',
   notes: [

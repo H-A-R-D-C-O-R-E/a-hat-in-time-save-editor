@@ -20,7 +20,6 @@ import { backpackList } from './backpack-list.js';
 export default backpackList({
   id: 'stickers',
   title: 'Stickers',
-  blurb: 'The stickers you have unlocked for your room.',
   list: 'stickers',
   groupLabel: 'stickers',
   notes: [

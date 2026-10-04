@@ -175,8 +175,6 @@ function setCount(doc, id, value) {
 export default {
   id: ID,
   title: 'Backpack',
-  blurb:
-    'Passports, tickets, vault codes, badge parts and tags — every item in the Backpack section, with how many you are carrying.',
   // "Not in this save" would mean exactly the same as "Not collected" here.
   filters: ['all', 'collected', 'uncollected'],
 

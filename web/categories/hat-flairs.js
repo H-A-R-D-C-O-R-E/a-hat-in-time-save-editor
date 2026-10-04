@@ -73,7 +73,6 @@ function resolve(flair, found) {
 export default {
   id: 'hat-flairs',
   title: 'Hat Flairs',
-  blurb: 'Cosmetics worn on a hat. Ticking one adds it as its own entry in the save’s Hats array.',
   // "Not in this save" would mean exactly the same as "Not collected" here.
   filters: ['all', 'collected', 'uncollected'],
 

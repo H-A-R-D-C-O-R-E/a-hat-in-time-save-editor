@@ -280,9 +280,6 @@ function pruneScaffold(doc, el) {
 export default {
   id: 'deathwishes',
   title: 'Death Wishes',
-  blurb:
-    'How many stamps each Death Wish carries. The three boxes are the first, ' +
-    'second and third stamp, left to right.',
 
   // "Not in this save" would mean exactly the same as "Not collected" here.
   filters: ['all', 'collected', 'uncollected'],

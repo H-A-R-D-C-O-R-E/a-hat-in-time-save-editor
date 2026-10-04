@@ -46,7 +46,13 @@ import {
 } from '../data/more.js';
 
 if (!Array.isArray(SECRET_LEVELS) || SECRET_LEVELS.length === 0) {
-  throw new Error('web/data/more.js has no secret levels — run `npm run build`');
+  // No catalog — this happens when web/data/more.js was built without any
+  // sample saves on disk (the builder harvests secret levels from *.hat).
+  // Rows still work: each save's own UnlockedSecretLevels become rows, so
+  // editing what the save carries is unaffected — only offering locked
+  // vanilla rifts to a save that lacks them needs the catalog. Re-run
+  // `npm run build` with a save next to it to populate the catalog.
+  console.warn('web/data/more.js has no secret levels — run `npm run build` with a .hat nearby');
 }
 if (!Array.isArray(CONTRACT_ORDER) || CONTRACT_ORDER.length === 0) {
   throw new Error('web/data/more.js has no contracts — run `npm run build`');
@@ -195,6 +201,46 @@ function insertIndex(doc, name) {
 }
 
 /* ------------------------------------------------------------- scalars ----- */
+
+/** TotalPlayTime is stored as seconds but edited as h / m / s / cs (1:23:04.62). */
+const TIME_ROW = 'TotalPlayTime';
+const TIME_KEYS = ['h', 'm', 's', 'cs'];
+
+/** Seconds -> { h, m, s, cs }. cs is hundredths, 00–99. */
+function splitPlayTime(total) {
+  const t = Number(total) || 0;
+  let h = Math.floor(t / 3600);
+  let m = Math.floor((t - h * 3600) / 60);
+  let s = Math.floor(t - h * 3600 - m * 60);
+  let cs = Math.round((t - h * 3600 - m * 60 - s) * 100);
+  if (cs >= 100) {
+    cs -= 100;
+    s += 1;
+  }
+  if (s >= 60) {
+    s -= 60;
+    m += 1;
+  }
+  if (m >= 60) {
+    m -= 60;
+    h += 1;
+  }
+  return { h, m, s, cs };
+}
+
+/** { h, m, s, cs } -> seconds, the format the file holds. */
+function joinPlayTime({ h, m, s, cs }) {
+  return h * 3600 + m * 60 + s + cs / 100;
+}
+
+/** One h/m/s/cs component is valid, before anything is written. */
+function fitsTimeComponent(key, value) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return false;
+  if (key === 'h') return Number.isInteger(value) && value >= 0;
+  if (key === 'm' || key === 's') return Number.isInteger(value) && value >= 0 && value <= 59;
+  if (key === 'cs') return Number.isInteger(value) && value >= 0 && value <= 99;
+  return false;
+}
 
 /** What a field reads as when the save does not have it: its zero value. */
 function readScalar(prop, def) {
@@ -410,10 +456,6 @@ function setActBits(doc, name, value) {
 export default {
   id: 'more',
   title: 'More',
-  blurb:
-    'Everything else the save tracks: pons, play time, badge points, where you are, ' +
-    'secret levels, challenge roads, Snatcher contracts and ActBits. ' +
-    'The number in a box is the value in the file.',
 
   rows(doc) {
     const rows = [];
@@ -432,15 +474,25 @@ export default {
         row.note = `stored as ${prop.type}`;
       }
       if (def.type !== 'BoolProperty') {
-        row.fields = [{
-          key: 'value',
-          label: 'value',
-          type: 'number',
-          value,
-          min: def.min ?? 0,
-          step: def.step ?? 1,
-          ...(def.max === undefined ? {} : { max: def.max }),
-        }];
+        if (def.name === TIME_ROW) {
+          const parts = splitPlayTime(value);
+          row.fields = [
+            { key: 'h', label: 'Hours', text: 'h', type: 'number', value: parts.h, min: 0, step: 1 },
+            { key: 'm', label: 'Minutes', text: 'm', type: 'number', value: parts.m, min: 0, max: 59, step: 1 },
+            { key: 's', label: 'Seconds', text: 's', type: 'number', value: parts.s, min: 0, max: 59, step: 1 },
+            { key: 'cs', label: 'Hundredths', text: 'cs', type: 'number', value: parts.cs, min: 0, max: 99, step: 1 },
+          ];
+        } else {
+          row.fields = [{
+            key: 'value',
+            label: 'value',
+            type: 'number',
+            value,
+            min: def.min ?? 0,
+            step: def.step ?? 1,
+            ...(def.max === undefined ? {} : { max: def.max }),
+          }];
+        }
       }
       rows.push(row);
     }
@@ -578,16 +630,24 @@ export default {
   },
 
   /**
-   * One field of a row: the number of a scalar or an ActBits flag, or one of
-   * the three contract boxes.
+   * One field of a row: the number of a scalar or an ActBits flag, one
+   * h / m / s / cs box of TotalPlayTime, or one of the three contract boxes.
    *
    * @param {object} doc  decoded save (mutated in place)
    * @param {string} id   row id
-   * @param {string} key  `value` | `completed` | `turnedIn` | `available`
+   * @param {string} key  `value` | `h` | `m` | `s` | `cs` | `completed` | `turnedIn` | `available`
    * @param {number|boolean|null} value  null when the box was emptied
    * @returns {boolean} whether the document changed
    */
   setField(doc, id, key, value) {
+    if (id === TIME_ROW && TIME_KEYS.includes(key)) {
+      const def = fieldDef(id);
+      if (!def || !fitsTimeComponent(key, value)) return false;
+      const prop = top(doc, def.name);
+      const parts = splitPlayTime(readScalar(prop, def));
+      parts[key] = value;
+      return setScalar(doc, def, joinPlayTime(parts));
+    }
     if (key === 'value') {
       const def = fieldDef(id);
       if (def) return def.type === 'BoolProperty' ? false : setScalar(doc, def, value);
@@ -613,6 +673,7 @@ export default {
 
   notes: [
     'A number writes one top-level property, under its own internal name; the value in the box is the value in the file. Integers must fit int32 and floats float32, an emptied or unreadable box is refused rather than read as a zero, and a float is stored rounded to the float32 the file holds.',
+    'TotalPlayTime is the exception: the file holds seconds, but the row shows hours / minutes / seconds / hundredths — 1:23:04.62 is h=1, m=23, s=4, cs=62. Editing any box converts back to seconds — h × 3600 + m × 60 + s + cs ÷ 100 — and writes that, rounded to the float32 the file holds. Hours are 0 and up, minutes and seconds 0–59, hundredths 0–99.',
     'A field this save does not have yet is created by the first edit that needs it — placed after the property the game keeps next to it — and is tagged "not in this save" until then. Creating a value and then clearing it again takes the field back out, so the file ends up exactly as it started; a field the game wrote is kept even at zero.',
     'A row is ticked when its value is non-zero (a contract when any of its three boxes is on). "Not in this save" filters to the fields and entries this save has no record of at all.',
     'Secret levels are strings in UnlockedSecretLevels; ticking one adds it, unticking removes it, and a save with no such list grows one on the first tick. Only the vanilla rifts are offered to every save — a Mod: rift belongs to the content pack that made it, so it appears only in a save that already carries it.',

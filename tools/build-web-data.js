@@ -359,18 +359,59 @@ if (CHALLENGE_ROADS.length === 0) {
 
 // Mod-made secret levels are left out of the catalog (see the harvest note) —
 // a save that carries one still gets it as a row from its own list.
-const offeredSecretLevels = [...secretLevels]
+let offeredSecretLevels = [...secretLevels]
   .filter((id) => !id.startsWith('Mod:'))
   .sort();
+let offeredActFlags = [...actFlags].sort();
+let offeredContractObjects = Object.fromEntries(
+  [...contractPathOf].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+);
+
+/**
+ * Fallback catalog for when no sample saves were on disk (`decoded === 0`).
+ * Secret levels and ActBits live nowhere except in saves, so a build without
+ * any save to harvest from would otherwise emit empty lists — and the web
+ * editor would have no locked vanilla rift to offer. These are the vanilla
+ * ids observed in real saves (a hundo file carries exactly these 10 secret
+ * levels; the flags are the global ones it tracks, plus `hasenteredwater`
+ * which older saves track), with contracts qualified the way every save on
+ * disk writes them. A build *with* saves still harvests everything from the
+ * saves themselves and ignores this table.
+ */
+if (decoded === 0) {
+  console.warn('  ! no sample saves found — using the built-in vanilla catalog');
+  offeredSecretLevels = [
+    'Cruise_CaveRift_Aquarium',
+    'Metro_CaveRift_RumbiFactory',
+    'Sands_PurpleRiftSandSails',
+    'SandsSkiesPurple',
+    'TimeRift_Cave_Alps',
+    'TimeRift_Cave_BirdBasement',
+    'TimeRift_Cave_CampPurpleRift',
+    'TimeRift_Cave_Mafia',
+    'TimeRift_Cave_Raccoon',
+    'Witch_Dream',
+  ];
+  offeredActFlags = [
+    'deathwishfirstlevelintro',
+    'deathwishfirsttimeinit',
+    'hasenteredwater',
+    'mirrormodeactlock',
+    'totalavailablerifttokens',
+    'uncollectedpons',
+    'uncollectedrifttokens',
+  ];
+  offeredContractObjects = Object.fromEntries(
+    CONTRACT_ORDER.map((id) => [id, `hatintimegamecontent.${id}`])
+  );
+}
 
 emit(path.join(OUT_DIR, 'more.js'), BANNER, {
   SECRET_LEVELS: offeredSecretLevels,
-  ACT_FLAGS: [...actFlags].sort(),
+  ACT_FLAGS: offeredActFlags,
   CONTRACT_ORDER,
   CHALLENGE_ROADS,
-  CONTRACT_OBJECTS: Object.fromEntries(
-    [...contractPathOf].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
-  ),
+  CONTRACT_OBJECTS: offeredContractObjects,
 });
 
 console.log(
@@ -388,8 +429,8 @@ console.log(
         ` (${seen} observed in saves)`;
     }).join('\n') +
     `\n  more      ${offeredSecretLevels.length} secret levels ` +
-    `(${secretLevels.size - offeredSecretLevels.length} mod ids held back), ` +
-    `${actFlags.size} ActBits flags, ` +
-    `${CONTRACT_ORDER.length} contracts (${contractPathOf.size} paths observed), ` +
+    `(${Math.max(secretLevels.size - offeredSecretLevels.length, 0)} mod ids held back), ` +
+    `${offeredActFlags.length} ActBits flags, ` +
+    `${CONTRACT_ORDER.length} contracts (${Object.keys(offeredContractObjects).length} paths observed), ` +
     `${CHALLENGE_ROADS.length} challenge roads`
 );

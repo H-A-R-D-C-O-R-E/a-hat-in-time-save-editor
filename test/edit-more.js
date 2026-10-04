@@ -95,6 +95,16 @@ check('every row agrees with the file, and every label is the raw id', () => {
       if (id === 'AllowSaving') {
         assert.equal(row.fields, undefined, `${name}: AllowSaving is one plain box`);
         assert.equal(row.checked, prop ? !!prop.value : false, `${name}: AllowSaving`);
+      } else if (id === 'TotalPlayTime') {
+        // seconds in the file, h / m / s / cs in the row (1:23:04.62)
+        assert.deepEqual(row.fields.map((f) => f.key), ['h', 'm', 's', 'cs'],
+          `${name}: TotalPlayTime needs h/m/s/cs fields`);
+        assert.ok(row.fields.every((f) => f.type === 'number'), `${name}: all number fields`);
+        const value = prop?.value ?? 0;
+        const total = row.fields[0].value * 3600 + row.fields[1].value * 60
+          + row.fields[2].value + row.fields[3].value / 100;
+        assert.ok(Math.abs(total - value) < 0.011, `${name}: TotalPlayTime splits ${value}`);
+        assert.equal(row.checked, value !== 0, `${name}: TotalPlayTime tick`);
       } else {
         const field = row.fields?.[0];
         assert.equal(field?.type, 'number', `${name}: ${id} needs a number field`);
@@ -233,9 +243,10 @@ check('an absent scalar is created, and cleared away byte for byte', () => {
     const original = load(name);
     const doc = decodeSave(name);
     // a *number* row this save has no record of — AllowSaving is a box, not a
-    // number, and the ActBits rows have numbers of their own
+    // number, TotalPlayTime has its own h/m/s/cs boxes (covered below), and the
+    // ActBits rows have numbers of their own
     const row = more.rows(doc).find((r) => SCALAR_GROUPS.includes(r.group)
-      && r.present === false && r.fields?.[0]?.type === 'number');
+      && r.present === false && r.fields?.[0]?.type === 'number' && r.id !== 'TotalPlayTime');
     if (!row) continue;
     exercised += 1;
 
@@ -299,6 +310,14 @@ check('values are validated before anything is written', () => {
   refuse('TotalPlayTime', 'value', null);
   refuse('TotalPlayTime', 'value', Number.NaN);
   refuse('TotalPlayTime', 'value', 1e39);       // past float32
+  refuse('TotalPlayTime', 'h', null);           // emptied box
+  refuse('TotalPlayTime', 'h', -1);
+  refuse('TotalPlayTime', 'h', 1.5);            // whole hours only
+  refuse('TotalPlayTime', 'm', 60);
+  refuse('TotalPlayTime', 's', 60);
+  refuse('TotalPlayTime', 'cs', 100);
+  refuse('TotalPlayTime', 'cs', 1.5);          // whole hundredths only
+  refuse('TotalPlayTime', 'cs', null);
   refuse('LastPlayTime', 'value', -(2 ** 31) - 1);
   refuse('AllowSaving', 'value', 4);            // a box, not a number
   refuse('no_such_row', 'value', 1);
@@ -334,6 +353,26 @@ check('a field the game wrote is kept at zero, one we created is removed', () =>
   assert.equal(more.set(fresh, 'AllowSaving', true), true);
   assert.equal(more.set(fresh, 'AllowSaving', false), true);
   assert.equal(top(fresh, 'AllowSaving').value, false, 'kept, because the file had it');
+});
+
+check('TotalPlayTime edits h/m/s/cs but stores seconds', () => {
+  const doc = decodeSave('hat kid default file.hat');
+  assert.equal(top(doc, 'TotalPlayTime'), undefined, 'a fresh save has no play time yet');
+
+  assert.equal(more.setField(doc, 'TotalPlayTime', 'h', 1), true);
+  assert.equal(more.setField(doc, 'TotalPlayTime', 'm', 23), true);
+  assert.equal(more.setField(doc, 'TotalPlayTime', 's', 4), true);
+  assert.equal(more.setField(doc, 'TotalPlayTime', 'cs', 62), true);
+  const prop = top(doc, 'TotalPlayTime');
+  assert.equal(prop.type, 'FloatProperty');
+  assert.ok(Math.abs(prop.value - (3600 + 23 * 60 + 4 + 62 / 100)) < 0.011);
+
+  const fields = more.rows(doc).find((r) => r.id === 'TotalPlayTime').fields;
+  assert.deepEqual(fields.map((f) => f.key), ['h', 'm', 's', 'cs']);
+  assert.deepEqual([fields[0].value, fields[1].value, fields[2].value, fields[3].value],
+    [1, 23, 4, 62]);
+
+  confined(diff(flatten(decodeSave('hat kid default file.hat')), flatten(doc)), 'TotalPlayTime');
 });
 
 // ------------------------------------------------------------- secret levels -----

@@ -16,7 +16,6 @@ import { backpackList } from './backpack-list.js';
 export default backpackList({
   id: 'filters',
   title: 'Filters',
-  blurb: 'The camera filters you have unlocked.',
   list: 'filters',
   groupLabel: 'camera filters',
   notes: [
