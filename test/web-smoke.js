@@ -63,6 +63,8 @@ const tally = () => $('tally').textContent;
 
 // every download goes through these; a check swaps them in around the click
 let blob = null;
+const pieces = (root = document) =>
+  [...root.querySelectorAll('#list .row:not([data-finale])')];
 const realCreate = URL.createObjectURL;
 const realRevoke = URL.revokeObjectURL;
 
@@ -132,7 +134,7 @@ await check('the drop zone is really gone, not merely flagged hidden', () => {
 });
 
 await check('renders one row per known time piece, grouped in game order', () => {
-  assert.equal(rows().length, 56);
+  assert.equal(pieces().length, 56);
   const groups = [...document.querySelectorAll('#list .group')].map(
     (g) => g.querySelector('.group-title')
   );
@@ -177,16 +179,16 @@ await check('TimeRift_Cave_Tour sits with the Spaceship rifts, not Chapter 5', (
   assert.ok(spaceshipGroup, 'Spaceship group not rendered');
   assert.ok(spaceshipGroup.contains(tour), 'tour is in the wrong group');
   assert.ok(
-    [...spaceshipGroup.querySelectorAll('.row-name')].map((n) => n.textContent).sort().join(', ')
+    [...spaceshipGroup.querySelectorAll('.row:not([data-finale]) .row-name')].map((n) => n.textContent).sort().join(', ')
       === 'Spaceship_WaterRift_Gallery, Spaceship_WaterRift_MailRoom, TimeRift_Cave_Tour',
-    `Spaceship group was: ${[...spaceshipGroup.querySelectorAll('.row-name')].map((n) => n.textContent).join(', ')}`
+    `Spaceship group was: ${[...spaceshipGroup.querySelectorAll('.row:not([data-finale]) .row-name')].map((n) => n.textContent).join(', ')}`
   );
 
   const finaleGroup = [...document.querySelectorAll('#list .group')].find(
     (g) => g.querySelector('.group-title').title === 'Chapter5_Finale'
   );
   assert.ok(finaleGroup, 'Chapter 5 group disappeared');
-  assert.equal(finaleGroup.querySelectorAll('.row').length, 1);
+  assert.equal([...finaleGroup.querySelectorAll('.row:not([data-finale])')].length, 1);
   assert.match(finaleGroup.textContent, /TheFinale_FinalBoss/);
 });
 
@@ -294,7 +296,7 @@ await check('an empty result shows a message', () => {
 await check('clearing the search restores every row', () => {
   $('search').value = '';
   fire($('search'), 'input');
-  assert.equal(rows().length, 56);
+  assert.equal(pieces().length, 56);
 });
 
 await check('"Not in this save" is empty in a complete save', () => {
@@ -303,7 +305,7 @@ await check('"Not in this save" is empty in a complete save', () => {
   assert.ok(document.querySelector('#list .no-match'));
 
   fire(chips('All'), 'click');
-  assert.equal(rows().length, 56);
+  assert.equal(pieces().length, 56);
 });
 
 // ------------------------------------------------------------- bulk ---------
@@ -1075,7 +1077,7 @@ await check('CDLC1 renders its 625 pieces and marks the mod ones', async () => {
 
   goto('time-pieces');
   assert.equal($('file-name').textContent, 'CDLC1 Hundo.hat');
-  assert.equal(rows().length, 625);
+  assert.equal(pieces().length, 625);
   assert.equal(tally(), '625 / 625 collected');
   assert.ok(document.querySelectorAll('#list .tag-mod').length > 500,
     'mod pieces should be badged');

@@ -10,7 +10,7 @@
     "encode": "node src/cli.js encode",
     "build": "node tools/build-web-data.js",
     "web": "node tools/build-web-data.js && node tools/serve.js",
-    "test": "node test/roundtrip.js && node test/edit-timepieces.js && node test/edit-deathwishes.js && node test/edit-hats.js && node test/edit-badges.js && node test/edit-backpack-lists.js && node test/edit-backpack-items.js && node test/edit-character.js && node test/edit-more.js && node test/web-smoke.js"
+    "test": "node test/roundtrip.js && node test/edit-timepieces.js && node test/anim-timepieces.js && node test/edit-deathwishes.js && node test/edit-hats.js && node test/edit-badges.js && node test/edit-backpack-lists.js && node test/edit-backpack-items.js && node test/edit-character.js && node test/edit-more.js && node test/web-smoke.js"
   },
   "devDependencies": {
     "linkedom": "^0.18.13"

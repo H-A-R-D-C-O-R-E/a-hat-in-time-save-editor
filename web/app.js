@@ -296,11 +296,13 @@ function renderList() {
     shown += visible.length;
 
     const all = groups.get(key);
-    const done = all.filter((r) => r.checked).length;
+    // finale pseudo-rows ride inside their chapter group but are not "pieces"
+    const pieces = all.filter((r) => !r.finale);
+    const done = pieces.filter((r) => r.checked).length;
     const section = h('section', { class: 'group' }, [
       h('header', { class: 'group-head' }, [
         h('span', { class: 'group-title', text: cat.groupTitle(key), title: key }),
-        h('span', { class: 'group-count', text: `${done}/${all.length}` }),
+        h('span', { class: 'group-count', text: `${done}/${pieces.length}` }),
       ]),
       h(
         'ul',
@@ -335,9 +337,10 @@ function rowNode(row) {
 
   const kids = [];
 
-  if (hasFields(row)) {
-    // The row's state lives in its fields (three stamp boxes per death wish),
-    // so there is no single box to click — the name stays inert text.
+  // Death Wishes puts its three stamp boxes in place of the main checkbox;
+  // a row can also keep the main box and carry extra fields of its own
+  // (Time Pieces: the collected box plus the animation-seen ones).
+  if (hasFields(row) && !row.box) {
     kids.push(
       h('span', { class: 'row-label row-label--plain' }, [
         h('span', { class: 'row-name', text: row.label }),
@@ -354,11 +357,17 @@ function rowNode(row) {
     kids.push(
       h('label', { class: 'row-label' }, [box, h('span', { class: 'row-name', text: row.label })])
     );
+    if (hasFields(row)) {
+      kids.push(h('span', { class: 'row-fields' }, row.fields.map((field) => fieldNode(row, field))));
+    }
   }
 
   if (tags.length) kids.push(h('span', { class: 'row-tags' }, tags));
 
-  return h('li', { class: `row${row.disabled ? ' is-disabled' : ''}`, dataset: { id: row.id } }, kids);
+  return h('li', {
+    class: `row${row.disabled ? ' is-disabled' : ''}`,
+    dataset: { id: row.id, ...(row.finale ? { finale: '' } : {}) },
+  }, kids);
 }
 
 const hasFields = (row) => Array.isArray(row.fields) && row.fields.length > 0;
@@ -405,7 +414,7 @@ function fieldValue(field, target) {
 
 function refreshMeta() {
   if (!state.doc) return;
-  const rows = state.category.rows(state.doc);
+  const rows = state.category.rows(state.doc).filter((r) => !r.finale);  // finale boxes are not "pieces"
   const selected = rows.filter((r) => r.checked).length;
 
   // Pending changes are counted across every category, not just the visible one.
@@ -461,7 +470,7 @@ function applyField(id, key, value) {
 }
 
 function applyBulk(checked) {
-  const visible = state.category.rows(state.doc).filter((row) => !row.disabled && matches(row));
+  const visible = state.category.rows(state.doc).filter((row) => !row.disabled && !row.finale && matches(row));
   let changed = false;
   // `set` is idempotent and reports whether it actually wrote anything, so
   // there is nothing to pre-compare here: a partial row still needs all three
